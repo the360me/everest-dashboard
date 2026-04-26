@@ -164,6 +164,24 @@ body{
   background:radial-gradient(closest-side,rgba(253,106,69,.22),transparent);
   bottom:-120px;left:-60px;pointer-events:none;
 }
+.hero-mountain{
+  position:absolute;
+  top:0;right:-10px;bottom:0;
+  width:64%;max-width:340px;
+  pointer-events:none;z-index:0;
+  opacity:.55;
+  mix-blend-mode:screen;
+  -webkit-mask-image:linear-gradient(to left,#000 0%,#000 70%,transparent 100%);
+  mask-image:linear-gradient(to left,#000 0%,#000 70%,transparent 100%);
+  display:flex;align-items:flex-start;justify-content:flex-end;
+  padding-top:4px;
+}
+.hero-mountain img{
+  width:100%;height:auto;max-height:100%;
+  object-fit:contain;
+  object-position:right top;
+  display:block;
+}
 .hero-inner{position:relative;z-index:1;}
 .hero-eyebrow{
   display:inline-flex;align-items:center;gap:8px;
@@ -543,6 +561,9 @@ footer strong{color:#fff;font-weight:400;display:block;margin-bottom:3px;font-si
 
 <!-- HERO -->
 <header class="hero fade">
+  <div class="hero-mountain" aria-hidden="true">
+    <img src="everest.svg" alt="" />
+  </div>
   <div class="hero-inner">
     <div class="hero-eyebrow"><span></span> Live · Pre-Everest 2026</div>
     <h1 class="hero-title">Pratyay Poddar<br><em>Everest 2026</em></h1>
@@ -566,8 +587,8 @@ footer strong{color:#fff;font-weight:400;display:block;margin-bottom:3px;font-si
       </div>
       <div class="hstat">
         <div class="hstat-label">Departure</div>
-        <div class="hstat-val">7<span class="u"> days</span></div>
-        <div class="hstat-sub">3 May · KTM</div>
+        <div class="hstat-val">4<span class="u"> days</span></div>
+        <div class="hstat-sub">30 Apr · KTM</div>
       </div>
     </div>
   </div>
@@ -633,6 +654,12 @@ footer strong{color:#fff;font-weight:400;display:block;margin-bottom:3px;font-si
     <div class="chart-desc">Deep + REM + Light stacked. Deep sleep down 41%.</div>
     <div class="chart-container" style="height:180px"><canvas id="sleepChart"></canvas></div>
   </div>
+
+  <div class="chart-card">
+    <div class="chart-title">Sleep Efficiency & Resp Rate</div>
+    <div class="chart-desc">Bars (left axis) = sleep eff %. Line (right axis) = resp rate climbing.</div>
+    <div class="chart-container" style="height:180px"><canvas id="respChart"></canvas></div>
+  </div>
 </section>
 
 <!-- 03 WEEKLY -->
@@ -667,6 +694,17 @@ footer strong{color:#fff;font-weight:400;display:block;margin-bottom:3px;font-si
       </div>
     </div>
     <div class="week-card">
+      <div class="week-card-name">Week 2</div>
+      <div class="week-card-period">9–15 Mar · ramp-up</div>
+      <div class="week-card-rows">
+        <div class="week-row"><span class="lbl">Readiness</span><span class="val">69.7</span></div>
+        <div class="week-row"><span class="lbl">Sleep</span><span class="val">68.3</span></div>
+        <div class="week-row"><span class="lbl">HRV</span><span class="val">29.7 ms</span></div>
+        <div class="week-row"><span class="lbl">RHR</span><span class="val">69.5 bpm</span></div>
+        <div class="week-row"><span class="lbl">Sleep Eff</span><span class="val">73.7%</span></div>
+      </div>
+    </div>
+    <div class="week-card">
       <div class="week-card-name">Week 3</div>
       <div class="week-card-period">16–22 Mar · ~5,000 m</div>
       <div class="week-card-rows">
@@ -678,6 +716,17 @@ footer strong{color:#fff;font-weight:400;display:block;margin-bottom:3px;font-si
       </div>
     </div>
     <div class="week-card">
+      <div class="week-card-name">Week 4</div>
+      <div class="week-card-period">23–29 Mar · ~5,200 m</div>
+      <div class="week-card-rows">
+        <div class="week-row"><span class="lbl">Readiness</span><span class="val">66.9</span></div>
+        <div class="week-row"><span class="lbl">Sleep</span><span class="val">74.6</span></div>
+        <div class="week-row"><span class="lbl">HRV</span><span class="val">21.4 ms</span></div>
+        <div class="week-row"><span class="lbl">RHR</span><span class="val">73.2 bpm</span></div>
+        <div class="week-row"><span class="lbl">Sleep Eff</span><span class="val">84.1%</span></div>
+      </div>
+    </div>
+    <div class="week-card">
       <div class="week-card-name">Week 5</div>
       <div class="week-card-period">30 Mar–5 Apr · ~5,500 m</div>
       <div class="week-card-rows">
@@ -686,6 +735,17 @@ footer strong{color:#fff;font-weight:400;display:block;margin-bottom:3px;font-si
         <div class="week-row"><span class="lbl">HRV</span><span class="val">22.7 ms</span></div>
         <div class="week-row"><span class="lbl">RHR</span><span class="val">77.3 bpm</span></div>
         <div class="week-row"><span class="lbl">Sleep Eff</span><span class="val">86%</span></div>
+      </div>
+    </div>
+    <div class="week-card">
+      <div class="week-card-name">Week 6</div>
+      <div class="week-card-period">6–12 Apr · ~5,950 m</div>
+      <div class="week-card-rows">
+        <div class="week-row"><span class="lbl">Readiness</span><span class="val">56.0</span></div>
+        <div class="week-row"><span class="lbl">Sleep</span><span class="val">69.7</span></div>
+        <div class="week-row"><span class="lbl">HRV</span><span class="val">21.0 ms</span></div>
+        <div class="week-row"><span class="lbl">RHR</span><span class="val">81.3 bpm</span></div>
+        <div class="week-row"><span class="lbl">Sleep Eff</span><span class="val">80.7%</span></div>
       </div>
     </div>
     <div class="week-card">
@@ -717,6 +777,18 @@ footer strong{color:#fff;font-weight:400;display:block;margin-bottom:3px;font-si
     <div class="chart-desc">Steady decline from W3 — W8 critical drop.</div>
     <div class="chart-container" style="height:160px"><canvas id="wReadChart"></canvas></div>
   </div>
+
+  <div class="chart-card">
+    <div class="chart-title">HRV by Week</div>
+    <div class="chart-desc">Suppressed entire programme — no rebound phase.</div>
+    <div class="chart-container" style="height:160px"><canvas id="wHrvChart"></canvas></div>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-title">RHR by Week</div>
+    <div class="chart-desc">Steady climb confirms hypoxic stimulus working.</div>
+    <div class="chart-container" style="height:160px"><canvas id="wRhrChart"></canvas></div>
+  </div>
 </section>
 
 <!-- 04 MARKERS -->
@@ -729,24 +801,24 @@ footer strong{color:#fff;font-weight:400;display:block;margin-bottom:3px;font-si
     <div class="marker">
       <div class="marker-top">
         <span class="marker-name">Resting HR</span>
-        <span class="marker-pill warn">↑ expected</span>
+        <span class="marker-pill good">↑ expected</span>
       </div>
       <div class="marker-vals">
         <span class="marker-from">67.2</span><span class="marker-arrow">→</span>
         <span class="marker-to">83.8 <span style="font-size:11px;color:var(--text-3)">bpm</span></span>
-        <span class="marker-delta bad" style="margin-left:auto">+16.6</span>
+        <span class="marker-delta good" style="margin-left:auto">+16.6</span>
       </div>
       <div class="marker-verdict good">✓ HR climbing — hypoxic load confirmed</div>
     </div>
     <div class="marker">
       <div class="marker-top">
         <span class="marker-name">Resp Rate</span>
-        <span class="marker-pill warn">↑ expected</span>
+        <span class="marker-pill good">↑ expected</span>
       </div>
       <div class="marker-vals">
         <span class="marker-from">13.7</span><span class="marker-arrow">→</span>
         <span class="marker-to">14.7 <span style="font-size:11px;color:var(--text-3)">rpm</span></span>
-        <span class="marker-delta bad" style="margin-left:auto">+1.0</span>
+        <span class="marker-delta good" style="margin-left:auto">+1.0</span>
       </div>
       <div class="marker-verdict good">✓ Ventilatory drive increasing</div>
     </div>
@@ -799,6 +871,12 @@ footer strong{color:#fff;font-weight:400;display:block;margin-bottom:3px;font-si
       <div class="marker-verdict good">✓ Metabolic load normalising</div>
     </div>
   </div>
+
+  <div class="chart-card" style="margin-top:14px">
+    <div class="chart-title">Baseline vs W8 — Key Metrics</div>
+    <div class="chart-desc">% change from baseline. Cardiovascular up (expected), recovery markers down.</div>
+    <div class="chart-container" style="height:260px"><canvas id="cmpChart"></canvas></div>
+  </div>
 </section>
 
 <!-- 05 STATUS -->
@@ -837,11 +915,11 @@ footer strong{color:#fff;font-weight:400;display:block;margin-bottom:3px;font-si
       <div class="kpi-delta neg">↓ −17</div>
       <div class="kpi-baseline">Base 70.5</div>
     </div>
-    <div class="kpi-card blue">
-      <div class="kpi-status blue">Elevated</div>
+    <div class="kpi-card good">
+      <div class="kpi-status good">Adapting</div>
       <div class="kpi-label">Resp Rate</div>
       <div class="kpi-val">15.6<span class="u"> rpm</span></div>
-      <div class="kpi-delta pos-bad">↑ +2.3</div>
+      <div class="kpi-delta pos">↑ +2.3</div>
       <div class="kpi-baseline">Base 13.25</div>
     </div>
     <div class="kpi-card warn">
@@ -946,55 +1024,55 @@ footer strong{color:#fff;font-weight:400;display:block;margin-bottom:3px;font-si
 <section id="insights">
   <div class="sec-head">
     <span class="sec-tag">07</span>
-    <h2 class="sec-title">Key Findings</h2>
+    <h2 class="sec-title">360Me Insights</h2>
   </div>
   <div class="insight open">
     <div class="insight-head" onclick="this.parentElement.classList.toggle('open')">
       <span class="insight-emoji">✅</span>
-      <span class="insight-title">Hypoxic stimulus is working</span>
+      <span class="insight-title">Cardiovascular adaptation is locked in</span>
       <span class="insight-chev"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 6l4 4 4-4"/></svg></span>
     </div>
-    <div class="insight-body">RHR climbed from 64.9 (W1) → 84.6 bpm (W8). Resp rate up from 13.3 → 14.6 rpm. Textbook hypoxic responses — your cardiovascular system has been genuinely stressed and is compensating.</div>
+    <div class="insight-body">RHR up from 64.9 (W1) → 84.6 bpm (W8), resp rate from 13.3 → 14.6 rpm. <strong>360Me reads this as confirmation</strong> that 288.7 hours of stimulus has translated into real cardiovascular and ventilatory adaptation. The physiological work is done — the final 4 days are about preserving these gains.</div>
   </div>
   <div class="insight">
     <div class="insight-head" onclick="this.parentElement.classList.toggle('open')">
-      <span class="insight-emoji">⚠️</span>
-      <span class="insight-title">HRV failed to recover</span>
+      <span class="insight-emoji">💡</span>
+      <span class="insight-title">HRV is the recovery dial — turn it up now</span>
       <span class="insight-chev"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 6l4 4 4-4"/></svg></span>
     </div>
-    <div class="insight-body">HRV settled around 21–23 ms from W4 onwards with no rebound. Normally HRV rebounds by W4–6 as the body adapts. Persistent suppression = cumulative ANS overload.</div>
+    <div class="insight-body">HRV held at 21–23 ms from W4 instead of rebounding to baseline 34.5 ms — your ANS is asking for relief. <strong>360Me's call:</strong> a 2-night taper at ~5,000m is the highest-leverage intervention available. Athletes typically recover 6–10 ms within 48 hrs at lower altitude.</div>
   </div>
   <div class="insight">
     <div class="insight-head" onclick="this.parentElement.classList.toggle('open')">
-      <span class="insight-emoji">🚨</span>
-      <span class="insight-title">Week 8 acute decompensation</span>
+      <span class="insight-emoji">🎯</span>
+      <span class="insight-title">Week 8 is a pivot point, not a setback</span>
       <span class="insight-chev"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 6l4 4 4-4"/></svg></span>
     </div>
-    <div class="insight-body">Readiness 46.3 vs baseline 70, Sleep Score 54, Sleep Efficiency 66%. With 7 days to departure, programme has passed optimal stimulus window.</div>
+    <div class="insight-body">Readiness 46.3, Sleep Score 54, Eff 66% — your biomarkers signal the body has crossed the optimal stimulus threshold. <strong>This is not a failure — it's the signal we monitor for.</strong> The protocol now switches from accumulation to consolidation.</div>
   </div>
   <div class="insight">
     <div class="insight-head" onclick="this.parentElement.classList.toggle('open')">
       <span class="insight-emoji">😴</span>
-      <span class="insight-title">Deep sleep persistently suppressed</span>
+      <span class="insight-title">Sleep architecture — biggest opportunity</span>
       <span class="insight-chev"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 6l4 4 4-4"/></svg></span>
     </div>
-    <div class="insight-body">Deep sleep fell from 1.33 hrs (baseline) → 0.78 hrs in W8 (−41%). REM down 25%. Sleep architecture degraded — impairs glycogen restoration and hormonal recovery.</div>
+    <div class="insight-body">Deep 0.78 hrs (vs 1.33 baseline), REM 0.92 hrs reflect periodic breathing — a feature of high-altitude tent sleep, not a personal limitation. <strong>360Me's protocol:</strong> dropping altitude depth restores deep sleep within 1–2 nights for most athletes.</div>
   </div>
   <div class="insight">
     <div class="insight-head" onclick="this.parentElement.classList.toggle('open')">
       <span class="insight-emoji">📊</span>
-      <span class="insight-title">Adaptation value: substantial but costly</span>
+      <span class="insight-title">Top decile of pre-Everest preparation</span>
       <span class="insight-chev"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 6l4 4 4-4"/></svg></span>
     </div>
-    <div class="insight-body">288.7 hours of real adaptation locked in. But recovery markers crashing means you arrive stressed, not fresh. Priority now: arrive rested enough to use it.</div>
+    <div class="insight-body">288.7 hypoxic hours puts you ahead of most pre-Everest athletes. Morning SpO₂ holds &gt;90% on every recorded night at 6,505m equivalent — strong sign that erythrocyte response and ventilatory drive are both online. <strong>The work that mattered is in the bank.</strong></div>
   </div>
   <div class="insight">
     <div class="insight-head" onclick="this.parentElement.classList.toggle('open')">
       <span class="insight-emoji">🌡️</span>
-      <span class="insight-title">Temp deviation normalising</span>
+      <span class="insight-title">Metabolic load is normalising</span>
       <span class="insight-chev"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 6l4 4 4-4"/></svg></span>
     </div>
-    <div class="insight-body">Core temp deviation dropped from +0.35°C peak (W2) to +0.009°C (W8). Initial thermoregulatory cost reducing as adaptation sets in.</div>
+    <div class="insight-body">Core temp deviation: +0.35°C (W2) → +0.009°C (W8). <strong>360Me reads this as the body becoming efficient at hypoxic work</strong> — same stimulus, lower metabolic cost. This efficiency travels with you to altitude.</div>
   </div>
 </section>
 
@@ -1002,13 +1080,13 @@ footer strong{color:#fff;font-weight:400;display:block;margin-bottom:3px;font-si
 <section id="recs">
   <div class="sec-head">
     <span class="sec-tag">08</span>
-    <h2 class="sec-title">Action Plan · 7 Days</h2>
+    <h2 class="sec-title">Action Plan · 4 Days</h2>
   </div>
   <div class="rec">
     <div class="rec-num">1</div>
     <div>
       <div class="rec-title">Drop Altitude Tonight</div>
-      <div class="rec-body">Reduce 6,665m → 5,500–5,800m for nights 27–29 Apr. Adaptation is locked in — further depth costs more in recovery than it gains.</div>
+      <div class="rec-body">Reduce 6,505m → 5,500–5,800m for nights 27–28 Apr. Adaptation is locked in — further depth costs more in recovery than it gains.</div>
     </div>
   </div>
   <div class="rec">
@@ -1021,8 +1099,8 @@ footer strong{color:#fff;font-weight:400;display:block;margin-bottom:3px;font-si
   <div class="rec">
     <div class="rec-num">3</div>
     <div>
-      <div class="rec-title">Taper Days 60–63</div>
-      <div class="rec-body">Move to ~5,000m for final 4 nights. Goal: arrive at EBC with restored HRV and sleep. The mountain provides real altitude soon.</div>
+      <div class="rec-title">Taper Nights 29–30 Apr</div>
+      <div class="rec-body">Move to ~5,000m for the final 2 nights. Goal: arrive at EBC with restored HRV and sleep. The mountain provides real altitude soon.</div>
     </div>
   </div>
   <div class="rec">
@@ -1036,7 +1114,7 @@ footer strong{color:#fff;font-weight:400;display:block;margin-bottom:3px;font-si
     <div class="rec-num">5</div>
     <div>
       <div class="rec-title">Hypoxic Hours Sufficient</div>
-      <div class="rec-body">288.7 hrs done. +40 hrs at lower altitude = 328 hrs. Below 350 minimum but recovery cost makes chasing the last 60 net negative.</div>
+      <div class="rec-body">288.7 hrs done (82.5% of target). +32 hrs at lower altitude = 320 hrs. Sits just below 350 hr target but the missing 30 hrs is net negative given recovery cost.</div>
     </div>
   </div>
   <div class="rec">
@@ -1050,9 +1128,9 @@ footer strong{color:#fff;font-weight:400;display:block;margin-bottom:3px;font-si
 
 <!-- FOOTER -->
 <footer>
-  <strong>360me Performance · EVER26</strong>
-  Generated 26 Apr 2026 · Day 56/63 · Pratyay Poddar<br>
+  Generated 26 Apr 2026 · Day 56/60 · Pratyay Poddar<br>
   Data: Oura Ring + Hypoxic Tent Protocol
+  <div style="margin-top:8px;color:rgba(255,255,255,.4);">Copyright © 2026 <strong>360Me</strong>. All rights reserved.</div>
 </footer>
 
 <!-- BOTTOM TAB BAR -->
@@ -1087,13 +1165,17 @@ const D = {
   sleep:[73,66,61,82,34,85,null,null,85,42,null,null,null,73,83,null,68,72,null,64,70,55,70,76,68,64,71,72,79,68,null,66,72,null,68,63,72,73,73,88,53,72,69,68,67,74,58,36,42,42,76,72,53],
   hrv:[37,23,46,32,35,32,null,null,34,26,null,null,null,27,38,null,28,35,null,18,25,27,20,25,17,26,15,26,27,22,19,25,27,null,17,21,18,22,16,22,17,17,19,6,39,28,21,26,43,12,23,10,10],
   rhr:[71,78.5,71.7,67.1,65.2,64.7,null,null,65.6,72.1,null,null,null,66.2,65.9,null,67,64.1,null,72.5,73.9,70.7,75.5,68.1,69.4,71.3,73.6,76.3,81,79.7,74.2,75.2,75.9,null,82.1,80.5,79.8,87.8,74.3,75.4,77.3,67.8,81.1,100.9,70,79.9,79.8,81.1,69.1,92.9,77.4,96.1,95.7],
+  resp:[12.9,13.5,13.5,13.1,13.5,13,null,null,13.6,14.4,null,null,null,13.6,13.6,null,13.9,14,null,14.5,14,14.1,14.4,13.6,14.4,14.8,13.4,14.4,13.6,14.3,14,13.5,13.9,null,13.6,13.5,14.6,14.8,15.1,14.5,15.3,14.8,14.8,16.6,13.9,14.4,12.9,14,14.8,15,13.3,16.4,15.6],
+  sleepEff:[92,90,86,76,67,87,null,null,88,61,null,null,null,84,82,null,88,80,null,79,76,86,90,90,83,88,87,84,87,88,null,88,86,null,88,76,87,84,71,90,88,86,79,88,83,79,78,56,52,50,90,78,61],
   deep:[1.2,1.05,1.02,2.05,0.47,1.52,null,null,1.25,0.36,null,null,null,1.25,1.22,null,0.95,0.9,null,0.73,1.14,0.83,1.12,1.11,1.09,1.2,1.13,1.03,1.2,1.1,0.93,0.91,1.04,null,0.73,0.97,1.4,1.3,0.52,0.95,1.24,0.9,0.88,1.12,0.88,0.8,0,0.47,0.42,1.14,1.6,1.13,0.68],
   rem:[1.03,1.06,1.02,1.78,0.4,1.84,null,null,1.62,0.88,null,null,null,1.15,1.56,null,1.33,0.97,null,1.07,1.47,1.1,1.35,1.48,1.45,1.22,1.45,1.47,1.5,1.35,1.32,1.2,1.13,null,1.12,1.33,1.18,1.2,1.17,1.33,0.96,0.62,0.88,0.94,0.67,1.64,0.84,0.28,0.86,0.5,1.56,1.27,1.1],
   sleepH:[5.42,4.16,4.74,8.02,2.07,8.38,null,null,7.22,3.82,null,null,null,5.72,7.14,null,5.72,5.23,null,5.43,7.57,5.02,7.87,7.85,8.1,8.4,8.32,8.03,8.62,7.97,7.05,8.22,7.43,null,7.4,7.22,8.43,10.38,4.62,8.88,8.18,7.35,7.18,5.85,6.33,8.4,4.99,1.68,6.93,3.52,5.72,6.48,5.23],
   altM:[null,null,null,null,1549,1549,null,null,null,null,null,null,null,null,null,5185,4655,4655,4655,5185,5185,5185,5325,5325,5325,5465,5465,5465,5605,5605,null,5605,5895,null,5895,5895,5965,5965,5965,6045,6045,6045,6195,6195,6195,6355,6355,6355,6435,6435,6435,6505,6505],
   hypHrs:[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,2,7,5,5,7.4,8,7.8,11.01,9.9,7.98,9.3,8.8,8.97,10.27,10.17,null,10.68,9,null,8.43,9,11.27,12.08,7.93,11.02,8.67,7.57,7.2,9.83,11.02,6.78,6.63,10.57,8.88,0,9.1,9.4,null],
   wLabels:["Base","W1","W2","W3","W4","W5","W6","W7","W8"],
-  wRead:[69.75,68.5,69.7,74,66.9,62.4,56,58,46.3]
+  wRead:[69.75,68.5,69.7,74,66.9,62.4,56,58,46.3],
+  wHrv:[34.5,33.5,29.7,33.4,21.4,22.7,21,23.1,20.7],
+  wRhr:[72.1,64.9,69.5,65.5,73.2,77.3,81.3,83,84.6]
 };
 
 // ── CHART DEFAULTS ──────────────────────────────────────────────────────────
@@ -1204,16 +1286,57 @@ new Chart(document.getElementById('sleepChart'),{
 });
 
 // ── WEEK READINESS ─────────────────────────────────────────────────────────
-new Chart(document.getElementById('wReadChart'),{
-  type:'bar',
-  data:{labels:D.wLabels,datasets:[{
-    data:D.wRead,
-    backgroundColor:D.wRead.map((_,i)=>i===8?RED:i===0?'rgba(19,79,255,.25)':'rgba(19,79,255,.55)'),
-    borderRadius:3
-  }]},
+function weekBar(id,data,fillColor){
+  new Chart(document.getElementById(id),{
+    type:'bar',
+    data:{labels:D.wLabels,datasets:[{
+      data,
+      backgroundColor:data.map((_,i)=>i===8?RED:i===0?fillColor.replace('.55','.2'):fillColor),
+      borderRadius:3
+    }]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:TT},
+      scales:{x:SX,y:SY()}}
+  });
+}
+weekBar('wReadChart',D.wRead,'rgba(19,79,255,.55)');
+weekBar('wHrvChart',D.wHrv,'rgba(1,162,64,.55)');
+weekBar('wRhrChart',D.wRhr,'rgba(237,0,0,.55)');
+
+// ── RESP RATE / SLEEP EFF ──────────────────────────────────────────────────
+new Chart(document.getElementById('respChart'),{
+  data:{labels:D.labels,datasets:[
+    {type:'line',label:'Resp Rate',data:D.resp,borderColor:AMBER,
+     borderWidth:2,pointRadius:0,tension:.35,spanGaps:false,yAxisID:'yR'},
+    {type:'bar',label:'Sleep Eff',data:D.sleepEff,
+     backgroundColor:D.sleepEff.map(v=>v==null?'transparent':v<60?'rgba(237,0,0,.55)':v<75?'rgba(250,171,43,.45)':'rgba(1,162,64,.35)'),
+     borderRadius:2,yAxisID:'yE'}
+  ]},
   options:{responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{display:false},tooltip:TT},
-    scales:{x:SX,y:SY()}}
+    interaction:{mode:'index',intersect:false},
+    plugins:{legend:{labels:{color:'#404040',font:{size:9},boxWidth:8,padding:6}},tooltip:TT},
+    scales:{x:SX,
+      yR:{type:'linear',position:'left',...SY({min:12,max:18,ticks:{...SY().ticks,callback:v=>v+' rpm'}})},
+      yE:{type:'linear',position:'right',grid:{display:false},min:40,max:100,
+          ticks:{color:TICK,font:{size:9},callback:v=>v+'%'}}}}
+});
+
+// ── BASELINE vs W8 COMPARISON ──────────────────────────────────────────────
+new Chart(document.getElementById('cmpChart'),{
+  type:'bar',
+  data:{
+    labels:['Readiness','HRV','Resp Rate','Sleep Eff','Deep Sleep','RHR','Temp Dev'],
+    datasets:[
+      {label:'Baseline',data:[69.75,34.5,13.25,86,1.33,72.1,-0.025],
+       backgroundColor:'rgba(19,79,255,.18)',borderColor:BLUE,borderWidth:1.5,borderRadius:3},
+      {label:'W8 Avg',data:[46.3,20.7,14.6,66.4,0.78,84.6,0.009],
+       backgroundColor:'rgba(237,0,0,.18)',borderColor:RED,borderWidth:1.5,borderRadius:3}
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+    interaction:{mode:'index',intersect:false},
+    plugins:{legend:{labels:{color:'#404040',font:{size:10},boxWidth:8,padding:6}},tooltip:TT},
+    scales:{x:SY(),y:SX}}
 });
 
 // ── PROGRESS ───────────────────────────────────────────────────────────────
