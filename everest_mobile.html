@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#134fff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="EVER26">
+<title>EVER26 — Pratyay Poddar</title>
+<link rel="apple-touch-icon" href="logo.png">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+<style>
+/* ── 360me design tokens (Figma) ─────────────────────────────────────── */
+:root {
+  --blue:           #134fff;
+  --blue-dark:      #0f3fcc;
+  --blue-light:    #e7edff;
+  --magenta:        #b944c7;
+  --magenta-light:  #f8ecf9;
+  --orange:         #fd6a45;
+  --green:          #01a240;
+  --green-bg:       rgba(1,162,64,.12);
+  --green-border:   rgba(1,162,64,.32);
+  --amber:          #faab2b;
+  --amber-bg:       #fff7ea;
+  --amber-border:   rgba(250,171,43,.5);
+  --red:            #ed0000;
+  --red-bg:         rgba(237,0,0,.08);
+  --red-border:     rgba(237,0,0,.24);
+  --bg:             #f5f6f8;
+  --surface:        #ffffff;
+  --surface-alt:    #fafbfc;
+  --border:         rgba(190,190,190,.48);
+  --border-soft:    rgba(190,190,190,.24);
+  --text-1:         #2b2b2b;
+  --text-2:         #404040;
+  --text-3:         #a6a6a6;
+  --text-4:         rgba(0,0,0,.48);
+  --glass-bg:       rgba(255,255,255,.24);
+  --glass-border:   rgba(255,255,255,.4);
+  --glass-blur:     21px;
+  --r-card:         24px;
+  --r-panel:        20px;
+  --r-md:           16px;
+  --r-sm:           12px;
+  --r-pill:         100px;
+  --r-full:         9999px;
+  --shadow-card:    0 3.74px 7.48px rgba(43,43,43,.08);
+  --shadow-drop:    0 3.74px 3.74px rgba(43,43,43,.15);
+  --grad-brand:     linear-gradient(168deg, rgba(19,79,255,.9) 3%, rgba(133,92,165,.9) 49%, rgba(253,106,69,.9) 97%);
+  --grad-tag:       linear-gradient(90deg, rgba(19,79,255,.1) 0%, rgba(253,106,69,.1) 100%);
+  --grad-hero:      linear-gradient(135deg, #134fff 0%, #0f3fcc 60%, #855ca5 100%);
+  --top-h:          64px;
+  --bottom-h:       72px;
+  --safe-top:       env(safe-area-inset-top, 0);
+  --safe-bottom:    env(safe-area-inset-bottom, 0);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+html{font-size:16px;-webkit-text-size-adjust:100%;}
+body{
+  background:var(--bg);color:var(--text-1);
+  font-family:'Helvetica Neue','Helvetica',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
+  font-weight:400;line-height:1.5;
+  -webkit-font-smoothing:antialiased;letter-spacing:-.01em;
+  overscroll-behavior-y:contain;
+  padding-bottom:calc(var(--bottom-h) + var(--safe-bottom) + 12px);
+}
+
+/* ── TOP NAV — pill bar ─────────────────────────────────────────────── */
+.top-nav{
+  position:sticky;top:8px;z-index:90;
+  margin:calc(8px + var(--safe-top)) 12px 0;
+  background:rgba(255,255,255,.7);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border:1px solid var(--border-soft);
+  border-radius:var(--r-pill);
+  height:56px;display:flex;align-items:center;
+  padding:0 8px 0 16px;gap:8px;
+  box-shadow:0 4px 16px rgba(43,43,43,.06);
+}
+.top-nav-logo{flex-shrink:0;}
+.top-nav-logo img{width:40px;height:40px;display:block;}
+.top-nav-title{
+  flex:1;min-width:0;
+  font-size:14px;font-weight:500;color:var(--text-1);letter-spacing:-.3px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.top-nav-day{
+  background:var(--blue);color:#fff;font-size:12px;font-weight:500;
+  padding:6px 12px;border-radius:var(--r-pill);
+  letter-spacing:-.2px;flex-shrink:0;
+}
+.top-nav-menu{
+  width:40px;height:40px;border-radius:var(--r-pill);
+  background:transparent;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--text-1);flex-shrink:0;
+}
+.top-nav-menu svg{width:20px;height:20px;}
+
+/* Drawer (hamburger menu) */
+.drawer{
+  position:fixed;top:0;right:0;
+  width:280px;height:100%;z-index:200;
+  background:rgba(255,255,255,.92);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-left:1px solid var(--border);
+  padding:calc(20px + var(--safe-top)) 18px 24px;
+  transform:translateX(100%);
+  transition:transform .25s ease;
+  overflow-y:auto;
+}
+.drawer.open{transform:translateX(0);}
+.drawer-overlay{
+  position:fixed;inset:0;z-index:150;
+  background:rgba(0,0,0,.3);
+  opacity:0;pointer-events:none;
+  transition:opacity .25s;
+}
+.drawer-overlay.open{opacity:1;pointer-events:auto;}
+.drawer-header{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:24px;
+}
+.drawer-title{font-size:16px;font-weight:500;color:var(--text-1);letter-spacing:-.3px;}
+.drawer-close{
+  width:36px;height:36px;border-radius:var(--r-pill);
+  background:var(--blue-light);border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--blue);
+}
+.drawer-close svg{width:16px;height:16px;}
+.drawer-link{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 0;border-bottom:1px solid var(--border-soft);
+  font-size:15px;font-weight:400;color:var(--text-2);letter-spacing:-.2px;
+  text-decoration:none;cursor:pointer;
+}
+.drawer-link:last-child{border-bottom:none;}
+.drawer-link.active{color:var(--blue);font-weight:500;}
+.drawer-link svg{width:14px;height:14px;color:var(--text-3);}
+
+/* ── HERO ────────────────────────────────────────────────────────────── */
+.hero{
+  margin:16px 12px 0;
+  padding:28px 20px 28px;
+  background:var(--grad-hero);
+  border-radius:var(--r-card);
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;
+  width:300px;height:300px;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(255,255,255,.18),transparent);
+  top:-120px;right:-80px;pointer-events:none;
+}
+.hero::after{
+  content:'';position:absolute;
+  width:240px;height:240px;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(253,106,69,.22),transparent);
+  bottom:-120px;left:-60px;pointer-events:none;
+}
+.hero-inner{position:relative;z-index:1;}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.16);
+  border:1px solid rgba(255,255,255,.24);
+  color:rgba(255,255,255,.92);
+  font-size:12px;font-weight:400;letter-spacing:-.1px;
+  padding:6px 12px;border-radius:var(--r-pill);
+  margin-bottom:16px;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.hero-eyebrow span{
+  width:7px;height:7px;background:#4ADE80;border-radius:50%;
+  box-shadow:0 0 0 3px rgba(74,222,128,.3);
+}
+.hero-title{
+  font-size:30px;font-weight:500;line-height:1.05;letter-spacing:-1px;
+  color:#fff;margin-bottom:8px;
+}
+.hero-title em{font-style:normal;font-weight:300;color:rgba(255,255,255,.7);}
+.hero-sub{
+  font-size:13px;line-height:1.4;color:rgba(255,255,255,.78);
+  font-weight:300;letter-spacing:-.1px;
+}
+
+/* Hero stats (2x2) */
+.hstats{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;
+  margin-top:22px;
+}
+.hstat{
+  background:var(--glass-bg);border:1.5px solid var(--glass-border);
+  border-radius:var(--r-md);padding:14px 14px;
+  backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur));
+  box-shadow:inset -3px -3px 40px rgba(255,255,255,.03);
+}
+.hstat-label{
+  font-size:11px;font-weight:400;color:rgba(255,255,255,.7);
+  letter-spacing:-.1px;margin-bottom:6px;
+}
+.hstat-val{
+  font-size:24px;font-weight:500;color:#fff;line-height:24px;letter-spacing:-.5px;
+}
+.hstat-val .u{font-size:13px;font-weight:400;}
+.hstat-sub{
+  font-size:10.5px;color:rgba(255,255,255,.6);font-weight:300;
+  margin-top:3px;letter-spacing:-.1px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+
+/* ── PROGRESS ────────────────────────────────────────────────────────── */
+.prog{
+  margin:18px 12px 0;
+  background:var(--surface);border:1px solid var(--border-soft);
+  border-radius:var(--r-md);padding:16px 18px;
+  box-shadow:var(--shadow-card);
+}
+.prog-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.prog-label{font-size:12px;font-weight:500;color:var(--text-2);letter-spacing:-.2px;}
+.prog-val{font-size:13px;font-weight:500;color:var(--blue);letter-spacing:-.2px;}
+.prog-track{height:7px;background:rgba(190,190,190,.3);border-radius:var(--r-pill);overflow:hidden;}
+.prog-fill{
+  height:100%;border-radius:var(--r-pill);
+  background:linear-gradient(90deg,var(--blue) 0%,var(--magenta) 60%,var(--orange) 100%);
+  transition:width 1.4s cubic-bezier(.25,.8,.25,1);
+}
+.prog-meta{
+  display:flex;justify-content:space-between;
+  margin-top:8px;font-size:10.5px;color:var(--text-3);
+}
+.prog-meta .now{color:var(--blue);font-weight:500;}
+
+/* ── SECTION ─────────────────────────────────────────────────────────── */
+section{margin:28px 12px 0;scroll-margin-top:84px;}
+.sec-head{
+  display:flex;align-items:center;gap:10px;margin-bottom:14px;
+}
+.sec-tag{
+  font-size:10.5px;font-weight:500;letter-spacing:-.05px;
+  background:var(--blue-light);color:var(--blue-dark);
+  padding:3px 9px;border-radius:var(--r-pill);
+  border:0.5px solid var(--blue);
+}
+.sec-title{font-size:20px;font-weight:400;color:var(--text-1);letter-spacing:-.5px;line-height:24px;}
+.sec-meta{font-size:11px;color:var(--text-3);margin-left:auto;letter-spacing:-.1px;}
+
+/* ── KPI GRID (2-col on mobile) ──────────────────────────────────────── */
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.kpi-card{
+  background:var(--surface);border:1px solid var(--border-soft);
+  border-radius:var(--r-md);padding:14px 14px;
+  position:relative;overflow:hidden;
+  box-shadow:var(--shadow-card);
+}
+.kpi-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;
+  height:3px;background:var(--kpi-color,var(--blue));
+  border-radius:var(--r-md) var(--r-md) 0 0;
+}
+.kpi-card.good{--kpi-color:var(--green);}
+.kpi-card.warn{--kpi-color:var(--amber);}
+.kpi-card.crit{--kpi-color:var(--red);}
+.kpi-card.blue{--kpi-color:var(--blue);}
+.kpi-status{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:10px;font-weight:400;letter-spacing:-.1px;
+  padding:2.5px 8px;border-radius:var(--r-pill);
+  margin-bottom:8px;border:0.5px solid transparent;
+}
+.kpi-status.good{background:var(--green-bg);color:var(--green);border-color:var(--green-border);}
+.kpi-status.warn{background:var(--amber-bg);color:var(--amber);border-color:var(--amber-border);}
+.kpi-status.crit{background:var(--red-bg);color:var(--red);border-color:var(--red-border);}
+.kpi-status.blue{background:var(--blue-light);color:var(--blue);border-color:var(--blue);}
+.kpi-status::before{content:'';width:4.5px;height:4.5px;border-radius:50%;background:currentColor;}
+.kpi-label{font-size:11.5px;color:var(--text-2);margin-bottom:5px;letter-spacing:-.1px;}
+.kpi-val{
+  font-size:26px;font-weight:300;color:var(--text-1);
+  line-height:1;letter-spacing:-.5px;
+}
+.kpi-val .u{font-size:12px;color:var(--text-3);}
+.kpi-delta{
+  font-size:11px;font-weight:400;margin-top:6px;letter-spacing:-.1px;
+}
+.kpi-delta.neg{color:var(--red);}
+.kpi-delta.pos{color:var(--green);}
+.kpi-delta.pos-bad{color:var(--red);}
+.kpi-delta.neg-good{color:var(--green);}
+.kpi-baseline{font-size:10px;color:var(--text-3);margin-top:2px;font-weight:300;}
+
+/* ── CHART CARD ─────────────────────────────────────────────────────── */
+.chart-card{
+  background:var(--surface);border:1px solid var(--border-soft);
+  border-radius:var(--r-panel);padding:18px 16px;
+  box-shadow:var(--shadow-card);
+}
+.chart-card + .chart-card{margin-top:10px;}
+.chart-title{font-size:14px;font-weight:500;color:var(--text-1);margin-bottom:3px;letter-spacing:-.2px;}
+.chart-desc{font-size:11px;color:var(--text-3);line-height:1.45;font-weight:300;letter-spacing:-.1px;margin-bottom:12px;}
+.chart-container{position:relative;}
+
+/* Tabination — horizontal scroll on mobile */
+.tabs{
+  display:flex;gap:0;
+  background:rgba(255,255,255,.6);
+  border:1px solid var(--blue);
+  border-radius:var(--r-pill);padding:3px;
+  margin-bottom:14px;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{
+  font-size:12px;font-weight:400;padding:6px 14px;
+  border-radius:var(--r-pill);border:none;
+  background:transparent;color:var(--text-2);cursor:pointer;
+  letter-spacing:-.1px;white-space:nowrap;flex-shrink:0;
+}
+.tab.active{background:var(--blue);color:#fff;}
+.tab.crit-week.active{background:var(--red);}
+.tab.crit-week{color:var(--red);}
+
+/* ── WEEKLY HORIZONTAL CARDS ─────────────────────────────────────────── */
+.week-rail{
+  display:flex;gap:10px;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;
+  margin:0 -12px;padding:0 12px 4px;
+  scrollbar-width:none;
+}
+.week-rail::-webkit-scrollbar{display:none;}
+.week-card{
+  flex-shrink:0;width:220px;
+  background:var(--surface);border:1px solid var(--border-soft);
+  border-radius:var(--r-md);padding:14px;
+  box-shadow:var(--shadow-card);
+}
+.week-card.w8{
+  background:linear-gradient(180deg,rgba(237,0,0,.04) 0%,#fff 60%);
+  border-color:var(--red-border);
+}
+.week-card-name{font-size:14px;font-weight:500;color:var(--text-1);}
+.week-card-name.w8{color:var(--red);}
+.week-card-period{font-size:10.5px;color:var(--text-3);margin-top:1px;font-weight:300;}
+.week-card-rows{margin-top:10px;display:flex;flex-direction:column;gap:6px;}
+.week-row{display:flex;justify-content:space-between;font-size:11.5px;letter-spacing:-.1px;}
+.week-row .lbl{color:var(--text-3);font-weight:300;}
+.week-row .val{color:var(--text-1);font-weight:400;font-variant-numeric:tabular-nums;}
+
+/* ── ALERTS ───────────────────────────────────────────────────────── */
+.alert{
+  background:var(--surface);border:1px solid var(--border-soft);
+  border-radius:var(--r-md);padding:14px 16px;
+  border-left:4px solid var(--ac);
+  box-shadow:var(--shadow-card);
+}
+.alert + .alert{margin-top:10px;}
+.alert.crit{--ac:var(--red);background:linear-gradient(180deg,rgba(237,0,0,.04) 0%,#fff 70%);}
+.alert.warn{--ac:var(--amber);background:linear-gradient(180deg,rgba(250,171,43,.05) 0%,#fff 70%);}
+.alert-head{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.alert-badge{
+  font-size:10px;font-weight:500;padding:2.5px 8px;
+  border-radius:var(--r-pill);border:0.5px solid;letter-spacing:-.1px;
+}
+.alert-badge.crit{background:var(--red-bg);color:var(--red);border-color:var(--red-border);}
+.alert-badge.warn{background:var(--amber-bg);color:var(--amber);border-color:var(--amber-border);}
+.alert-name{font-size:12px;color:var(--text-2);font-weight:400;letter-spacing:-.1px;}
+.alert-row{display:flex;align-items:baseline;gap:10px;margin-bottom:6px;}
+.alert-cur{font-size:28px;font-weight:300;line-height:1;letter-spacing:-.5px;}
+.alert-cur.crit{color:var(--red);}
+.alert-cur.warn{color:var(--amber);}
+.alert-cur .u{font-size:13px;}
+.alert-meta{display:flex;flex-direction:column;gap:1px;}
+.alert-prev{font-size:10.5px;color:var(--text-3);font-weight:300;}
+.alert-d{font-size:13px;font-weight:500;letter-spacing:-.1px;}
+.alert-d.crit{color:var(--red);}
+.alert-d.warn{color:var(--amber);}
+.alert-desc{font-size:12px;color:var(--text-2);line-height:1.5;font-weight:300;letter-spacing:-.1px;}
+
+/* ── INSIGHT (FAQ-style) ───────────────────────────────────────────── */
+.insight{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-panel);overflow:hidden;
+}
+.insight + .insight{margin-top:10px;}
+.insight.open{border-color:var(--blue);box-shadow:var(--shadow-card);}
+.insight-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 16px;cursor:pointer;user-select:none;gap:10px;
+}
+.insight-emoji{font-size:18px;line-height:1;flex-shrink:0;}
+.insight-title{
+  flex:1;font-size:14px;font-weight:400;color:var(--text-2);
+  letter-spacing:-.2px;line-height:18px;
+}
+.insight.open .insight-title{
+  background:var(--grad-brand);
+  -webkit-background-clip:text;background-clip:text;
+  color:transparent;
+}
+.insight-chev{
+  width:30px;height:30px;border-radius:var(--r-pill);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--border);background:var(--surface);
+  color:var(--text-2);transition:all .25s;
+}
+.insight-chev svg{width:14px;height:14px;}
+.insight.open .insight-chev{
+  background:var(--blue);border-color:var(--blue);color:#fff;
+  transform:rotate(180deg);
+}
+.insight-body{
+  padding:0 16px;max-height:0;overflow:hidden;
+  transition:max-height .3s ease,padding .3s ease;
+  font-size:13px;color:var(--text-2);line-height:1.55;
+  font-weight:300;letter-spacing:-.1px;
+}
+.insight.open .insight-body{max-height:320px;padding:0 16px 16px;}
+
+/* ── MARKER ROWS ────────────────────────────────────────────────────── */
+.markers{
+  background:var(--surface);border:1px solid var(--border-soft);
+  border-radius:var(--r-panel);overflow:hidden;
+  box-shadow:var(--shadow-card);
+}
+.marker{
+  padding:14px 16px;border-bottom:1px solid var(--border-soft);
+}
+.marker:last-child{border-bottom:none;}
+.marker-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.marker-name{font-size:13.5px;font-weight:500;color:var(--text-1);letter-spacing:-.2px;}
+.marker-pill{
+  font-size:10px;font-weight:400;padding:2px 8px;border-radius:var(--r-pill);
+  border:0.5px solid;letter-spacing:-.1px;
+}
+.marker-pill.good{background:var(--green-bg);color:var(--green);border-color:var(--green-border);}
+.marker-pill.warn{background:var(--amber-bg);color:var(--amber);border-color:var(--amber-border);}
+.marker-pill.bad{background:var(--red-bg);color:var(--red);border-color:var(--red-border);}
+.marker-vals{display:flex;align-items:baseline;gap:8px;margin-bottom:4px;}
+.marker-from{font-size:13px;color:var(--text-3);font-weight:300;letter-spacing:-.1px;}
+.marker-arrow{color:var(--text-3);font-size:11px;}
+.marker-to{font-size:18px;font-weight:400;color:var(--text-1);letter-spacing:-.3px;}
+.marker-delta{font-size:12px;font-weight:500;}
+.marker-delta.bad{color:var(--red);}
+.marker-delta.good{color:var(--green);}
+.marker-verdict{font-size:11.5px;font-weight:400;letter-spacing:-.1px;line-height:1.4;}
+.marker-verdict.good{color:var(--green);}
+.marker-verdict.warn{color:var(--amber);}
+.marker-verdict.bad{color:var(--red);}
+
+/* ── REC CARD ───────────────────────────────────────────────────────── */
+.rec{
+  background:var(--surface);border:1px solid var(--border-soft);
+  border-radius:var(--r-md);padding:14px 16px;
+  display:flex;gap:12px;align-items:flex-start;
+  box-shadow:var(--shadow-card);
+}
+.rec + .rec{margin-top:10px;}
+.rec-num{
+  min-width:32px;height:32px;border-radius:var(--r-pill);
+  background:var(--blue-light);color:var(--blue);
+  font-size:14px;font-weight:500;letter-spacing:-.2px;
+  display:flex;align-items:center;justify-content:center;
+  border:0.5px solid var(--blue);flex-shrink:0;
+}
+.rec-title{font-size:14px;font-weight:500;color:var(--text-1);margin-bottom:5px;letter-spacing:-.2px;}
+.rec-body{font-size:12.5px;color:var(--text-2);line-height:1.5;font-weight:300;letter-spacing:-.1px;}
+
+/* ── BOTTOM TAB BAR ─────────────────────────────────────────────────── */
+.tabbar{
+  position:fixed;bottom:8px;left:12px;right:12px;z-index:80;
+  background:rgba(255,255,255,.85);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border:1px solid var(--border-soft);
+  border-radius:var(--r-pill);
+  height:60px;
+  display:flex;align-items:center;justify-content:space-around;
+  padding:0 6px;
+  box-shadow:0 8px 32px rgba(43,43,43,.12);
+  padding-bottom:max(0px, var(--safe-bottom));
+}
+.tabbar-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:2px;
+  background:transparent;border:none;cursor:pointer;
+  padding:6px 4px;border-radius:var(--r-pill);
+  text-decoration:none;color:var(--text-3);
+  transition:color .15s;
+}
+.tabbar-item.active{color:var(--blue);}
+.tabbar-item svg{width:22px;height:22px;}
+.tabbar-label{font-size:10px;font-weight:500;letter-spacing:-.1px;}
+
+/* ── FOOTER ─────────────────────────────────────────────────────────── */
+footer{
+  margin:28px 12px 0;
+  padding:18px 16px;
+  background:#2b2b2b;color:rgba(255,255,255,.6);
+  border-radius:var(--r-md);
+  font-size:11px;font-weight:300;line-height:1.55;letter-spacing:-.1px;
+}
+footer strong{color:#fff;font-weight:400;display:block;margin-bottom:3px;font-size:12px;letter-spacing:-.2px;}
+
+/* ── ANIMATION ──────────────────────────────────────────────────────── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.fade{animation:fadeUp .4s ease both;}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="top-nav">
+  <a class="top-nav-logo" href="#"><img src="logo.png" alt="360me"/></a>
+  <span class="top-nav-title">EVER26 · Pratyay</span>
+  <span class="top-nav-day">Day 56</span>
+  <button class="top-nav-menu" id="menuBtn" aria-label="Menu">
+    <svg viewBox="0 0 20 20" fill="currentColor"><path d="M3 5h14a1 1 0 110 2H3a1 1 0 110-2zm0 4h14a1 1 0 110 2H3a1 1 0 110-2zm0 4h14a1 1 0 110 2H3a1 1 0 110-2z"/></svg>
+  </button>
+</nav>
+
+<!-- HAMBURGER DRAWER -->
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<aside class="drawer" id="drawer">
+  <div class="drawer-header">
+    <div class="drawer-title">Sections</div>
+    <button class="drawer-close" id="drawerClose" aria-label="Close">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path d="M5.3 4.3a1 1 0 011.4 0L10 7.6l3.3-3.3a1 1 0 111.4 1.4L11.4 9l3.3 3.3a1 1 0 11-1.4 1.4L10 10.4l-3.3 3.3a1 1 0 11-1.4-1.4L8.6 9 5.3 5.7a1 1 0 010-1.4z"/></svg>
+    </button>
+  </div>
+  <a href="#altitude" class="drawer-link" data-sec="altitude">Altitude Load <svg viewBox="0 0 14 14" fill="currentColor"><path d="M5 3l4 4-4 4"/></svg></a>
+  <a href="#trends" class="drawer-link" data-sec="trends">Daily Trends <svg viewBox="0 0 14 14" fill="currentColor"><path d="M5 3l4 4-4 4"/></svg></a>
+  <a href="#weekly" class="drawer-link" data-sec="weekly">Weekly Summary <svg viewBox="0 0 14 14" fill="currentColor"><path d="M5 3l4 4-4 4"/></svg></a>
+  <a href="#markers" class="drawer-link" data-sec="markers">Acclimatisation Markers <svg viewBox="0 0 14 14" fill="currentColor"><path d="M5 3l4 4-4 4"/></svg></a>
+  <a href="#status" class="drawer-link" data-sec="status">Current Status <svg viewBox="0 0 14 14" fill="currentColor"><path d="M5 3l4 4-4 4"/></svg></a>
+  <a href="#flags" class="drawer-link" data-sec="flags">Red Flags <svg viewBox="0 0 14 14" fill="currentColor"><path d="M5 3l4 4-4 4"/></svg></a>
+  <a href="#insights" class="drawer-link" data-sec="insights">Insights <svg viewBox="0 0 14 14" fill="currentColor"><path d="M5 3l4 4-4 4"/></svg></a>
+  <a href="#recs" class="drawer-link" data-sec="recs">Action Plan <svg viewBox="0 0 14 14" fill="currentColor"><path d="M5 3l4 4-4 4"/></svg></a>
+</aside>
+
+<!-- HERO -->
+<header class="hero fade">
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><span></span> Live · Pre-Everest 2026</div>
+    <h1 class="hero-title">Pratyay Poddar<br><em>Everest 2026</em></h1>
+    <p class="hero-sub">Hypoxic acclimatisation · Oura Ring · 56 days</p>
+
+    <div class="hstats">
+      <div class="hstat">
+        <div class="hstat-label">Altitude Now</div>
+        <div class="hstat-val">6,505<span class="u"> m</span></div>
+        <div class="hstat-sub">Setting A 11.5</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-label">Hypoxic Hours</div>
+        <div class="hstat-val">288.7<span class="u"> hrs</span></div>
+        <div class="hstat-sub">82.5% of 350 hrs</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-label">Avg Readiness</div>
+        <div class="hstat-val">62<span class="u">/100</span></div>
+        <div class="hstat-sub">Baseline 69.75</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-label">Departure</div>
+        <div class="hstat-val">7<span class="u"> days</span></div>
+        <div class="hstat-sub">3 May · KTM</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- PROGRESS -->
+<div class="prog fade">
+  <div class="prog-row">
+    <span class="prog-label">Hypoxic Hours</span>
+    <span class="prog-val">288.7 / 350 · 82.5%</span>
+  </div>
+  <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+  <div class="prog-meta">
+    <span>0</span><span class="now">▲ now</span><span>350 hrs</span>
+  </div>
+</div>
+
+<!-- 01 ALTITUDE -->
+<section id="altitude" class="fade">
+  <div class="sec-head">
+    <span class="sec-tag">01</span>
+    <h2 class="sec-title">Altitude Load</h2>
+  </div>
+  <div class="chart-card">
+    <div class="chart-title">Simulated Altitude + Hypoxic Hours</div>
+    <div class="chart-desc">Tent altitude equivalent (line) and hours per night (bars).</div>
+    <div class="chart-container" style="height:240px"><canvas id="altChart"></canvas></div>
+  </div>
+</section>
+
+<!-- 02 DAILY TRENDS -->
+<section id="trends">
+  <div class="sec-head">
+    <span class="sec-tag">02</span>
+    <h2 class="sec-title">Daily Trends</h2>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-title">Readiness & Sleep Score</div>
+    <div class="chart-desc">Red zone &lt;50 = inadequate recovery.</div>
+    <div class="tabs" id="readTabs">
+      <button class="tab active" data-s="both">Both</button>
+      <button class="tab" data-s="readiness">Readiness</button>
+      <button class="tab" data-s="sleep">Sleep</button>
+    </div>
+    <div class="chart-container" style="height:220px"><canvas id="readChart"></canvas></div>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-title">HRV — No Recovery Phase</div>
+    <div class="chart-desc">Suppressed throughout. Baseline 34.5 ms.</div>
+    <div class="chart-container" style="height:180px"><canvas id="hrvChart"></canvas></div>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-title">Resting HR — Hypoxic Compensation</div>
+    <div class="chart-desc">Climb from 64.9 → 84.6 bpm confirms adaptation.</div>
+    <div class="chart-container" style="height:180px"><canvas id="rhrChart"></canvas></div>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-title">Sleep Architecture</div>
+    <div class="chart-desc">Deep + REM + Light stacked. Deep sleep down 41%.</div>
+    <div class="chart-container" style="height:180px"><canvas id="sleepChart"></canvas></div>
+  </div>
+</section>
+
+<!-- 03 WEEKLY -->
+<section id="weekly">
+  <div class="sec-head">
+    <span class="sec-tag">03</span>
+    <h2 class="sec-title">Weekly Summary</h2>
+    <span class="sec-meta">Swipe →</span>
+  </div>
+
+  <div class="week-rail">
+    <div class="week-card">
+      <div class="week-card-name">Baseline</div>
+      <div class="week-card-period">26 Feb – 1 Mar</div>
+      <div class="week-card-rows">
+        <div class="week-row"><span class="lbl">Readiness</span><span class="val">69.8</span></div>
+        <div class="week-row"><span class="lbl">Sleep</span><span class="val">70.5</span></div>
+        <div class="week-row"><span class="lbl">HRV</span><span class="val">34.5 ms</span></div>
+        <div class="week-row"><span class="lbl">RHR</span><span class="val">72.1 bpm</span></div>
+        <div class="week-row"><span class="lbl">Sleep Eff</span><span class="val">86%</span></div>
+      </div>
+    </div>
+    <div class="week-card">
+      <div class="week-card-name">Week 1</div>
+      <div class="week-card-period">2–8 Mar · 1,549 m</div>
+      <div class="week-card-rows">
+        <div class="week-row"><span class="lbl">Readiness</span><span class="val">68.5</span></div>
+        <div class="week-row"><span class="lbl">Sleep</span><span class="val">59.5</span></div>
+        <div class="week-row"><span class="lbl">HRV</span><span class="val">33.5 ms</span></div>
+        <div class="week-row"><span class="lbl">RHR</span><span class="val">64.9 bpm</span></div>
+        <div class="week-row"><span class="lbl">Sleep Eff</span><span class="val">77%</span></div>
+      </div>
+    </div>
+    <div class="week-card">
+      <div class="week-card-name">Week 3</div>
+      <div class="week-card-period">16–22 Mar · ~5,000 m</div>
+      <div class="week-card-rows">
+        <div class="week-row"><span class="lbl">Readiness</span><span class="val">74.0</span></div>
+        <div class="week-row"><span class="lbl">Sleep</span><span class="val">69.4</span></div>
+        <div class="week-row"><span class="lbl">HRV</span><span class="val">33.4 ms</span></div>
+        <div class="week-row"><span class="lbl">RHR</span><span class="val">65.5 bpm</span></div>
+        <div class="week-row"><span class="lbl">Sleep Eff</span><span class="val">84.7%</span></div>
+      </div>
+    </div>
+    <div class="week-card">
+      <div class="week-card-name">Week 5</div>
+      <div class="week-card-period">30 Mar–5 Apr · ~5,500 m</div>
+      <div class="week-card-rows">
+        <div class="week-row"><span class="lbl">Readiness</span><span class="val">62.4</span></div>
+        <div class="week-row"><span class="lbl">Sleep</span><span class="val">72.7</span></div>
+        <div class="week-row"><span class="lbl">HRV</span><span class="val">22.7 ms</span></div>
+        <div class="week-row"><span class="lbl">RHR</span><span class="val">77.3 bpm</span></div>
+        <div class="week-row"><span class="lbl">Sleep Eff</span><span class="val">86%</span></div>
+      </div>
+    </div>
+    <div class="week-card">
+      <div class="week-card-name">Week 7</div>
+      <div class="week-card-period">13–19 Apr · ~6,100 m</div>
+      <div class="week-card-rows">
+        <div class="week-row"><span class="lbl">Readiness</span><span class="val">58.0</span></div>
+        <div class="week-row"><span class="lbl">Sleep</span><span class="val">69.9</span></div>
+        <div class="week-row"><span class="lbl">HRV</span><span class="val">23.1 ms</span></div>
+        <div class="week-row"><span class="lbl">RHR</span><span class="val">83.0 bpm</span></div>
+        <div class="week-row"><span class="lbl">Sleep Eff</span><span class="val">85.4%</span></div>
+      </div>
+    </div>
+    <div class="week-card w8">
+      <div class="week-card-name w8">Week 8 🚨</div>
+      <div class="week-card-period">20–26 Apr · ~6,400 m</div>
+      <div class="week-card-rows">
+        <div class="week-row"><span class="lbl">Readiness</span><span class="val">46.3</span></div>
+        <div class="week-row"><span class="lbl">Sleep</span><span class="val">54.1</span></div>
+        <div class="week-row"><span class="lbl">HRV</span><span class="val">20.7 ms</span></div>
+        <div class="week-row"><span class="lbl">RHR</span><span class="val">84.6 bpm</span></div>
+        <div class="week-row"><span class="lbl">Sleep Eff</span><span class="val">66.4%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-card" style="margin-top:14px">
+    <div class="chart-title">Readiness by Week</div>
+    <div class="chart-desc">Steady decline from W3 — W8 critical drop.</div>
+    <div class="chart-container" style="height:160px"><canvas id="wReadChart"></canvas></div>
+  </div>
+</section>
+
+<!-- 04 MARKERS -->
+<section id="markers">
+  <div class="sec-head">
+    <span class="sec-tag">04</span>
+    <h2 class="sec-title">Acclimatisation Markers</h2>
+  </div>
+  <div class="markers">
+    <div class="marker">
+      <div class="marker-top">
+        <span class="marker-name">Resting HR</span>
+        <span class="marker-pill warn">↑ expected</span>
+      </div>
+      <div class="marker-vals">
+        <span class="marker-from">67.2</span><span class="marker-arrow">→</span>
+        <span class="marker-to">83.8 <span style="font-size:11px;color:var(--text-3)">bpm</span></span>
+        <span class="marker-delta bad" style="margin-left:auto">+16.6</span>
+      </div>
+      <div class="marker-verdict good">✓ HR climbing — hypoxic load confirmed</div>
+    </div>
+    <div class="marker">
+      <div class="marker-top">
+        <span class="marker-name">Resp Rate</span>
+        <span class="marker-pill warn">↑ expected</span>
+      </div>
+      <div class="marker-vals">
+        <span class="marker-from">13.7</span><span class="marker-arrow">→</span>
+        <span class="marker-to">14.7 <span style="font-size:11px;color:var(--text-3)">rpm</span></span>
+        <span class="marker-delta bad" style="margin-left:auto">+1.0</span>
+      </div>
+      <div class="marker-verdict good">✓ Ventilatory drive increasing</div>
+    </div>
+    <div class="marker">
+      <div class="marker-top">
+        <span class="marker-name">HRV</span>
+        <span class="marker-pill warn">↓ then rebound</span>
+      </div>
+      <div class="marker-vals">
+        <span class="marker-from">31.6</span><span class="marker-arrow">→</span>
+        <span class="marker-to">21.9 <span style="font-size:11px;color:var(--text-3)">ms</span></span>
+        <span class="marker-delta bad" style="margin-left:auto">−9.7</span>
+      </div>
+      <div class="marker-verdict warn">⚠ Still suppressed — no recovery phase</div>
+    </div>
+    <div class="marker">
+      <div class="marker-top">
+        <span class="marker-name">Sleep Efficiency</span>
+        <span class="marker-pill good">↑ over time</span>
+      </div>
+      <div class="marker-vals">
+        <span class="marker-from">75.3</span><span class="marker-arrow">→</span>
+        <span class="marker-to">75.9 <span style="font-size:11px;color:var(--text-3)">%</span></span>
+        <span class="marker-delta good" style="margin-left:auto">+0.6</span>
+      </div>
+      <div class="marker-verdict good">✓ Adapting to tent</div>
+    </div>
+    <div class="marker">
+      <div class="marker-top">
+        <span class="marker-name">Deep Sleep</span>
+        <span class="marker-pill good">↑ expected</span>
+      </div>
+      <div class="marker-vals">
+        <span class="marker-from">1.14</span><span class="marker-arrow">→</span>
+        <span class="marker-to">0.86 <span style="font-size:11px;color:var(--text-3)">hrs</span></span>
+        <span class="marker-delta bad" style="margin-left:auto">−0.27</span>
+      </div>
+      <div class="marker-verdict bad">✗ Suppressed −24%</div>
+    </div>
+    <div class="marker">
+      <div class="marker-top">
+        <span class="marker-name">Temp Deviation</span>
+        <span class="marker-pill good">↓ to baseline</span>
+      </div>
+      <div class="marker-vals">
+        <span class="marker-from">+0.35</span><span class="marker-arrow">→</span>
+        <span class="marker-to">+0.03 <span style="font-size:11px;color:var(--text-3)">°C</span></span>
+        <span class="marker-delta good" style="margin-left:auto">−0.33</span>
+      </div>
+      <div class="marker-verdict good">✓ Metabolic load normalising</div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 STATUS -->
+<section id="status">
+  <div class="sec-head">
+    <span class="sec-tag">05</span>
+    <h2 class="sec-title">Current Status</h2>
+    <span class="sec-meta">W8 vs Baseline</span>
+  </div>
+  <div class="kpi-grid">
+    <div class="kpi-card crit">
+      <div class="kpi-status crit">Critical</div>
+      <div class="kpi-label">Readiness</div>
+      <div class="kpi-val">33<span class="u">/100</span></div>
+      <div class="kpi-delta neg">↓ −36.75</div>
+      <div class="kpi-baseline">Base 69.75</div>
+    </div>
+    <div class="kpi-card crit">
+      <div class="kpi-status crit">Critical</div>
+      <div class="kpi-label">HRV</div>
+      <div class="kpi-val">10<span class="u"> ms</span></div>
+      <div class="kpi-delta neg">↓ −24.5 ms</div>
+      <div class="kpi-baseline">Base 34.5</div>
+    </div>
+    <div class="kpi-card warn">
+      <div class="kpi-status warn">Elevated</div>
+      <div class="kpi-label">Resting HR</div>
+      <div class="kpi-val">95<span class="u"> bpm</span></div>
+      <div class="kpi-delta pos-bad">↑ +22.9 bpm</div>
+      <div class="kpi-baseline">Base 72.1</div>
+    </div>
+    <div class="kpi-card crit">
+      <div class="kpi-status crit">Critical</div>
+      <div class="kpi-label">Sleep Score</div>
+      <div class="kpi-val">53<span class="u">/100</span></div>
+      <div class="kpi-delta neg">↓ −17</div>
+      <div class="kpi-baseline">Base 70.5</div>
+    </div>
+    <div class="kpi-card blue">
+      <div class="kpi-status blue">Elevated</div>
+      <div class="kpi-label">Resp Rate</div>
+      <div class="kpi-val">15.6<span class="u"> rpm</span></div>
+      <div class="kpi-delta pos-bad">↑ +2.3</div>
+      <div class="kpi-baseline">Base 13.25</div>
+    </div>
+    <div class="kpi-card warn">
+      <div class="kpi-status warn">Low</div>
+      <div class="kpi-label">Sleep Hours</div>
+      <div class="kpi-val">5.2<span class="u"> hrs</span></div>
+      <div class="kpi-delta neg">↓ −1.5 vs W7</div>
+      <div class="kpi-baseline">W8 avg 4.9</div>
+    </div>
+    <div class="kpi-card crit">
+      <div class="kpi-status crit">Critical</div>
+      <div class="kpi-label">Sleep Eff</div>
+      <div class="kpi-val">61<span class="u">%</span></div>
+      <div class="kpi-delta neg">↓ −25%</div>
+      <div class="kpi-baseline">Base 86%</div>
+    </div>
+    <div class="kpi-card good">
+      <div class="kpi-status good">OK</div>
+      <div class="kpi-label">Morning SpO₂</div>
+      <div class="kpi-val">96<span class="u">%</span></div>
+      <div class="kpi-delta neg-good">Above 90 min</div>
+      <div class="kpi-baseline">All nights</div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 RED FLAGS -->
+<section id="flags">
+  <div class="sec-head">
+    <span class="sec-tag">06</span>
+    <h2 class="sec-title">Red Flags · Week 8</h2>
+  </div>
+  <div class="alert crit">
+    <div class="alert-head">
+      <span class="alert-badge crit">Critical</span>
+      <span class="alert-name">Readiness</span>
+    </div>
+    <div class="alert-row">
+      <div class="alert-cur crit">46.3</div>
+      <div class="alert-meta"><div class="alert-prev">Was 58.0 in W7</div><div class="alert-d crit">−11.7</div></div>
+    </div>
+    <div class="alert-desc">Body unable to recover between hypoxic nights. Pre-Everest target ≥65.</div>
+  </div>
+  <div class="alert crit">
+    <div class="alert-head">
+      <span class="alert-badge crit">Critical</span>
+      <span class="alert-name">Sleep Score</span>
+    </div>
+    <div class="alert-row">
+      <div class="alert-cur crit">54.1</div>
+      <div class="alert-meta"><div class="alert-prev">Was 69.9 in W7</div><div class="alert-d crit">−15.8</div></div>
+    </div>
+    <div class="alert-desc">Sharpest weekly drop in the programme. Sleep quality is now the #1 limiter.</div>
+  </div>
+  <div class="alert crit">
+    <div class="alert-head">
+      <span class="alert-badge crit">Critical</span>
+      <span class="alert-name">Sleep Efficiency</span>
+    </div>
+    <div class="alert-row">
+      <div class="alert-cur crit">66.4<span class="u">%</span></div>
+      <div class="alert-meta"><div class="alert-prev">Was 85.4% in W7</div><div class="alert-d crit">−19%</div></div>
+    </div>
+    <div class="alert-desc">Hypoxic periodic breathing (Cheyne-Stokes) disrupting cellular recovery.</div>
+  </div>
+  <div class="alert crit">
+    <div class="alert-head">
+      <span class="alert-badge crit">Critical</span>
+      <span class="alert-name">Sleep Duration</span>
+    </div>
+    <div class="alert-row">
+      <div class="alert-cur crit">4.94<span class="u"> hrs</span></div>
+      <div class="alert-meta"><div class="alert-prev">Was 6.42 hrs in W7</div><div class="alert-d crit">−1.48</div></div>
+    </div>
+    <div class="alert-desc">10.5 hrs sleep debt over 7 nights. Body should be peaking, not crashing.</div>
+  </div>
+  <div class="alert warn">
+    <div class="alert-head">
+      <span class="alert-badge warn">Warning</span>
+      <span class="alert-name">HRV</span>
+    </div>
+    <div class="alert-row">
+      <div class="alert-cur warn">20.7<span class="u"> ms</span></div>
+      <div class="alert-meta"><div class="alert-prev">Was 23.1 in W7</div><div class="alert-d warn">−2.4</div></div>
+    </div>
+    <div class="alert-desc">HRV never recovered above baseline. Persistent ANS suppression.</div>
+  </div>
+  <div class="alert warn">
+    <div class="alert-head">
+      <span class="alert-badge warn">Warning</span>
+      <span class="alert-name">Avg RHR</span>
+    </div>
+    <div class="alert-row">
+      <div class="alert-cur warn">84.6<span class="u"> bpm</span></div>
+      <div class="alert-meta"><div class="alert-prev">Was 83.0 in W7</div><div class="alert-d warn">+1.6</div></div>
+    </div>
+    <div class="alert-desc">Still climbing — combined with HRV crash = over-stimulus signature.</div>
+  </div>
+</section>
+
+<!-- 07 INSIGHTS -->
+<section id="insights">
+  <div class="sec-head">
+    <span class="sec-tag">07</span>
+    <h2 class="sec-title">Key Findings</h2>
+  </div>
+  <div class="insight open">
+    <div class="insight-head" onclick="this.parentElement.classList.toggle('open')">
+      <span class="insight-emoji">✅</span>
+      <span class="insight-title">Hypoxic stimulus is working</span>
+      <span class="insight-chev"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 6l4 4 4-4"/></svg></span>
+    </div>
+    <div class="insight-body">RHR climbed from 64.9 (W1) → 84.6 bpm (W8). Resp rate up from 13.3 → 14.6 rpm. Textbook hypoxic responses — your cardiovascular system has been genuinely stressed and is compensating.</div>
+  </div>
+  <div class="insight">
+    <div class="insight-head" onclick="this.parentElement.classList.toggle('open')">
+      <span class="insight-emoji">⚠️</span>
+      <span class="insight-title">HRV failed to recover</span>
+      <span class="insight-chev"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 6l4 4 4-4"/></svg></span>
+    </div>
+    <div class="insight-body">HRV settled around 21–23 ms from W4 onwards with no rebound. Normally HRV rebounds by W4–6 as the body adapts. Persistent suppression = cumulative ANS overload.</div>
+  </div>
+  <div class="insight">
+    <div class="insight-head" onclick="this.parentElement.classList.toggle('open')">
+      <span class="insight-emoji">🚨</span>
+      <span class="insight-title">Week 8 acute decompensation</span>
+      <span class="insight-chev"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 6l4 4 4-4"/></svg></span>
+    </div>
+    <div class="insight-body">Readiness 46.3 vs baseline 70, Sleep Score 54, Sleep Efficiency 66%. With 7 days to departure, programme has passed optimal stimulus window.</div>
+  </div>
+  <div class="insight">
+    <div class="insight-head" onclick="this.parentElement.classList.toggle('open')">
+      <span class="insight-emoji">😴</span>
+      <span class="insight-title">Deep sleep persistently suppressed</span>
+      <span class="insight-chev"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 6l4 4 4-4"/></svg></span>
+    </div>
+    <div class="insight-body">Deep sleep fell from 1.33 hrs (baseline) → 0.78 hrs in W8 (−41%). REM down 25%. Sleep architecture degraded — impairs glycogen restoration and hormonal recovery.</div>
+  </div>
+  <div class="insight">
+    <div class="insight-head" onclick="this.parentElement.classList.toggle('open')">
+      <span class="insight-emoji">📊</span>
+      <span class="insight-title">Adaptation value: substantial but costly</span>
+      <span class="insight-chev"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 6l4 4 4-4"/></svg></span>
+    </div>
+    <div class="insight-body">288.7 hours of real adaptation locked in. But recovery markers crashing means you arrive stressed, not fresh. Priority now: arrive rested enough to use it.</div>
+  </div>
+  <div class="insight">
+    <div class="insight-head" onclick="this.parentElement.classList.toggle('open')">
+      <span class="insight-emoji">🌡️</span>
+      <span class="insight-title">Temp deviation normalising</span>
+      <span class="insight-chev"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 6l4 4 4-4"/></svg></span>
+    </div>
+    <div class="insight-body">Core temp deviation dropped from +0.35°C peak (W2) to +0.009°C (W8). Initial thermoregulatory cost reducing as adaptation sets in.</div>
+  </div>
+</section>
+
+<!-- 08 ACTION PLAN -->
+<section id="recs">
+  <div class="sec-head">
+    <span class="sec-tag">08</span>
+    <h2 class="sec-title">Action Plan · 7 Days</h2>
+  </div>
+  <div class="rec">
+    <div class="rec-num">1</div>
+    <div>
+      <div class="rec-title">Drop Altitude Tonight</div>
+      <div class="rec-body">Reduce 6,665m → 5,500–5,800m for nights 27–29 Apr. Adaptation is locked in — further depth costs more in recovery than it gains.</div>
+    </div>
+  </div>
+  <div class="rec">
+    <div class="rec-num">2</div>
+    <div>
+      <div class="rec-title">Prioritise Sleep</div>
+      <div class="rec-body">Target 7+ hrs nightly. Sleep debt is the dominant performance limiter. Reduce O₂ depth if it causes arousals.</div>
+    </div>
+  </div>
+  <div class="rec">
+    <div class="rec-num">3</div>
+    <div>
+      <div class="rec-title">Taper Days 60–63</div>
+      <div class="rec-body">Move to ~5,000m for final 4 nights. Goal: arrive at EBC with restored HRV and sleep. The mountain provides real altitude soon.</div>
+    </div>
+  </div>
+  <div class="rec">
+    <div class="rec-num">4</div>
+    <div>
+      <div class="rec-title">HRV Hard Thresholds</div>
+      <div class="rec-body">HRV ≥25 ms = continue tapered profile. &lt;20 ms after 2 nights = stop tent. Today's 10ms is critically low.</div>
+    </div>
+  </div>
+  <div class="rec">
+    <div class="rec-num">5</div>
+    <div>
+      <div class="rec-title">Hypoxic Hours Sufficient</div>
+      <div class="rec-body">288.7 hrs done. +40 hrs at lower altitude = 328 hrs. Below 350 minimum but recovery cost makes chasing the last 60 net negative.</div>
+    </div>
+  </div>
+  <div class="rec">
+    <div class="rec-num">6</div>
+    <div>
+      <div class="rec-title">Nutrition & Recovery</div>
+      <div class="rec-body">3g carb/kg body weight. 2.5L+ hydration. Iron-rich foods. Zero alcohol — destroys HRV recovery.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <strong>360me Performance · EVER26</strong>
+  Generated 26 Apr 2026 · Day 56/63 · Pratyay Poddar<br>
+  Data: Oura Ring + Hypoxic Tent Protocol
+</footer>
+
+<!-- BOTTOM TAB BAR -->
+<nav class="tabbar">
+  <a class="tabbar-item active" href="#altitude" data-sec="altitude">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8M3 21h18"/></svg>
+    <span class="tabbar-label">Trends</span>
+  </a>
+  <a class="tabbar-item" href="#weekly" data-sec="weekly">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
+    <span class="tabbar-label">Weekly</span>
+  </a>
+  <a class="tabbar-item" href="#status" data-sec="status">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-7-10a4 4 0 017-2.6A4 4 0 0119 11c0 5.5-7 10-7 10z"/></svg>
+    <span class="tabbar-label">Status</span>
+  </a>
+  <a class="tabbar-item" href="#flags" data-sec="flags">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L3 22h18L12 2z"/><path d="M12 9v5M12 18v.01"/></svg>
+    <span class="tabbar-label">Flags</span>
+  </a>
+  <a class="tabbar-item" href="#recs" data-sec="recs">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3 8-8M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+    <span class="tabbar-label">Plan</span>
+  </a>
+</nav>
+
+<script>
+// ── DATA ─────────────────────────────────────────────────────────────────────
+const D = {
+  labels:["26-Feb","27-Feb","28-Feb","1-Mar","2-Mar","3-Mar","4-Mar","12-Mar","13-Mar","14-Mar","15-Mar","16-Mar","17-Mar","18-Mar","19-Mar","20-Mar","21-Mar","22-Mar","23-Mar","24-Mar","25-Mar","26-Mar","27-Mar","28-Mar","29-Mar","30-Mar","31-Mar","1-Apr","2-Apr","3-Apr","4-Apr","5-Apr","6-Apr","7-Apr","8-Apr","9-Apr","10-Apr","11-Apr","12-Apr","13-Apr","14-Apr","15-Apr","16-Apr","17-Apr","18-Apr","19-Apr","20-Apr","21-Apr","22-Apr","23-Apr","24-Apr","25-Apr","26-Apr"],
+  readiness:[68,56,70,85,59,78,null,null,86,46,null,null,null,66,83,null,72,70,null,57,59,68,null,75,60,64,66,63,58,53,61,63,65,null,66,58,71,57,62,81,42,72,65,46,65,69,48,43,63,36,56,45,33],
+  sleep:[73,66,61,82,34,85,null,null,85,42,null,null,null,73,83,null,68,72,null,64,70,55,70,76,68,64,71,72,79,68,null,66,72,null,68,63,72,73,73,88,53,72,69,68,67,74,58,36,42,42,76,72,53],
+  hrv:[37,23,46,32,35,32,null,null,34,26,null,null,null,27,38,null,28,35,null,18,25,27,20,25,17,26,15,26,27,22,19,25,27,null,17,21,18,22,16,22,17,17,19,6,39,28,21,26,43,12,23,10,10],
+  rhr:[71,78.5,71.7,67.1,65.2,64.7,null,null,65.6,72.1,null,null,null,66.2,65.9,null,67,64.1,null,72.5,73.9,70.7,75.5,68.1,69.4,71.3,73.6,76.3,81,79.7,74.2,75.2,75.9,null,82.1,80.5,79.8,87.8,74.3,75.4,77.3,67.8,81.1,100.9,70,79.9,79.8,81.1,69.1,92.9,77.4,96.1,95.7],
+  deep:[1.2,1.05,1.02,2.05,0.47,1.52,null,null,1.25,0.36,null,null,null,1.25,1.22,null,0.95,0.9,null,0.73,1.14,0.83,1.12,1.11,1.09,1.2,1.13,1.03,1.2,1.1,0.93,0.91,1.04,null,0.73,0.97,1.4,1.3,0.52,0.95,1.24,0.9,0.88,1.12,0.88,0.8,0,0.47,0.42,1.14,1.6,1.13,0.68],
+  rem:[1.03,1.06,1.02,1.78,0.4,1.84,null,null,1.62,0.88,null,null,null,1.15,1.56,null,1.33,0.97,null,1.07,1.47,1.1,1.35,1.48,1.45,1.22,1.45,1.47,1.5,1.35,1.32,1.2,1.13,null,1.12,1.33,1.18,1.2,1.17,1.33,0.96,0.62,0.88,0.94,0.67,1.64,0.84,0.28,0.86,0.5,1.56,1.27,1.1],
+  sleepH:[5.42,4.16,4.74,8.02,2.07,8.38,null,null,7.22,3.82,null,null,null,5.72,7.14,null,5.72,5.23,null,5.43,7.57,5.02,7.87,7.85,8.1,8.4,8.32,8.03,8.62,7.97,7.05,8.22,7.43,null,7.4,7.22,8.43,10.38,4.62,8.88,8.18,7.35,7.18,5.85,6.33,8.4,4.99,1.68,6.93,3.52,5.72,6.48,5.23],
+  altM:[null,null,null,null,1549,1549,null,null,null,null,null,null,null,null,null,5185,4655,4655,4655,5185,5185,5185,5325,5325,5325,5465,5465,5465,5605,5605,null,5605,5895,null,5895,5895,5965,5965,5965,6045,6045,6045,6195,6195,6195,6355,6355,6355,6435,6435,6435,6505,6505],
+  hypHrs:[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,2,7,5,5,7.4,8,7.8,11.01,9.9,7.98,9.3,8.8,8.97,10.27,10.17,null,10.68,9,null,8.43,9,11.27,12.08,7.93,11.02,8.67,7.57,7.2,9.83,11.02,6.78,6.63,10.57,8.88,0,9.1,9.4,null],
+  wLabels:["Base","W1","W2","W3","W4","W5","W6","W7","W8"],
+  wRead:[69.75,68.5,69.7,74,66.9,62.4,56,58,46.3]
+};
+
+// ── CHART DEFAULTS ──────────────────────────────────────────────────────────
+const BLUE='#134fff', GREEN='#01a240', RED='#ed0000', AMBER='#faab2b', PURPLE='#b944c7';
+const GRID='rgba(43,43,43,.06)', TICK='#a6a6a6';
+const FONT='Helvetica Neue,Helvetica,Arial,sans-serif';
+
+Chart.defaults.font.family=FONT;
+Chart.defaults.font.size=10;
+Chart.defaults.color=TICK;
+
+const TT={
+  backgroundColor:'#2b2b2b',borderColor:'#404040',borderWidth:1,
+  titleColor:'#fff',bodyColor:'#d1d5db',padding:8,cornerRadius:8,
+  titleFont:{size:11,weight:'500'},bodyFont:{size:10}
+};
+const SX={grid:{color:GRID,drawTicks:false},ticks:{color:TICK,maxTicksLimit:5,font:{size:9},padding:4}};
+const SY=(o={})=>({grid:{color:GRID,drawTicks:false},ticks:{color:TICK,font:{size:9},padding:4},...o});
+
+function lineDS(label,data,color,fill=false,dash=[]){
+  return{label,data,borderColor:color,
+    backgroundColor:fill?color+'1f':'transparent',fill,
+    borderWidth:2,pointRadius:0,pointHoverRadius:4,
+    tension:.35,spanGaps:false,borderDash:dash};
+}
+
+// ── ALTITUDE CHART ──────────────────────────────────────────────────────────
+new Chart(document.getElementById('altChart'),{
+  data:{labels:D.labels,datasets:[
+    {type:'line',label:'Alt (m)',data:D.altM,borderColor:BLUE,backgroundColor:'rgba(19,79,255,.1)',
+     fill:true,borderWidth:2,pointRadius:0,tension:.4,spanGaps:false,yAxisID:'yA'},
+    {type:'bar',label:'Hours',data:D.hypHrs,backgroundColor:'rgba(250,171,43,.55)',
+     borderRadius:2,yAxisID:'yH'}
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,
+    interaction:{mode:'index',intersect:false},
+    plugins:{legend:{labels:{color:'#404040',font:{size:10},boxWidth:8,padding:8}},tooltip:TT},
+    scales:{x:SX,
+      yA:{type:'linear',position:'left',...SY({ticks:{...SY().ticks,callback:v=>(v/1000).toFixed(1)+'k'}})},
+      yH:{type:'linear',position:'right',grid:{display:false},
+          ticks:{color:TICK,font:{size:9},callback:v=>v+'h'},max:14}}
+  }
+});
+
+// ── READINESS CHART ────────────────────────────────────────────────────────
+const readChart=new Chart(document.getElementById('readChart'),{
+  type:'line',
+  data:{labels:D.labels,datasets:[
+    lineDS('Readiness',D.readiness,BLUE,false),
+    lineDS('Sleep',D.sleep,'#6366F1',false,[5,3])
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,
+    interaction:{mode:'index',intersect:false},
+    plugins:{legend:{labels:{color:'#404040',font:{size:10},boxWidth:8,padding:6}},tooltip:TT,
+      annotation:{annotations:{
+        red:{type:'box',yMin:0,yMax:50,backgroundColor:'rgba(237,0,0,.06)',borderWidth:0},
+        line:{type:'line',yMin:50,yMax:50,borderColor:'rgba(237,0,0,.35)',borderWidth:1,borderDash:[4,3]}
+      }}},
+    scales:{x:SX,y:SY({min:20,max:100})}}
+});
+document.getElementById('readTabs').addEventListener('click',e=>{
+  const b=e.target.closest('.tab');if(!b)return;
+  document.querySelectorAll('#readTabs .tab').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  const m=b.dataset.s;
+  readChart.data.datasets[0].hidden=(m==='sleep');
+  readChart.data.datasets[1].hidden=(m==='readiness');
+  readChart.update();
+});
+
+// ── HRV ─────────────────────────────────────────────────────────────────────
+new Chart(document.getElementById('hrvChart'),{
+  type:'line',
+  data:{labels:D.labels,datasets:[lineDS('HRV',D.hrv,GREEN,true)]},
+  options:{responsive:true,maintainAspectRatio:false,
+    interaction:{mode:'index',intersect:false},
+    plugins:{legend:{display:false},tooltip:TT,
+      annotation:{annotations:{base:{type:'line',yMin:34.5,yMax:34.5,
+        borderColor:'rgba(1,162,64,.4)',borderWidth:1.5,borderDash:[5,3]}}}},
+    scales:{x:SX,y:SY({min:0,ticks:{...SY().ticks,callback:v=>v+'ms'}})}}
+});
+
+// ── RHR ─────────────────────────────────────────────────────────────────────
+new Chart(document.getElementById('rhrChart'),{
+  type:'line',
+  data:{labels:D.labels,datasets:[lineDS('RHR',D.rhr,RED,true)]},
+  options:{responsive:true,maintainAspectRatio:false,
+    interaction:{mode:'index',intersect:false},
+    plugins:{legend:{display:false},tooltip:TT,
+      annotation:{annotations:{base:{type:'line',yMin:72.1,yMax:72.1,
+        borderColor:'rgba(237,0,0,.4)',borderWidth:1.5,borderDash:[5,3]}}}},
+    scales:{x:SX,y:SY({ticks:{...SY().ticks,callback:v=>v+'bpm'}})}}
+});
+
+// ── SLEEP STACKED ──────────────────────────────────────────────────────────
+new Chart(document.getElementById('sleepChart'),{
+  type:'bar',
+  data:{labels:D.labels,datasets:[
+    {label:'Deep',data:D.deep,backgroundColor:BLUE,stack:'s'},
+    {label:'REM',data:D.rem,backgroundColor:PURPLE,stack:'s'},
+    {label:'Light',data:D.sleepH.map((v,i)=>v&&D.deep[i]&&D.rem[i]?Math.max(0,v-D.deep[i]-D.rem[i]):null),
+     backgroundColor:'rgba(166,166,166,.4)',stack:'s'}
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,
+    interaction:{mode:'index',intersect:false},
+    plugins:{legend:{labels:{color:'#404040',font:{size:9},boxWidth:8,padding:6}},tooltip:TT},
+    scales:{x:{...SX,stacked:true},y:{...SY({ticks:{...SY().ticks,callback:v=>v+'h'}}),stacked:true}}}
+});
+
+// ── WEEK READINESS ─────────────────────────────────────────────────────────
+new Chart(document.getElementById('wReadChart'),{
+  type:'bar',
+  data:{labels:D.wLabels,datasets:[{
+    data:D.wRead,
+    backgroundColor:D.wRead.map((_,i)=>i===8?RED:i===0?'rgba(19,79,255,.25)':'rgba(19,79,255,.55)'),
+    borderRadius:3
+  }]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:TT},
+    scales:{x:SX,y:SY()}}
+});
+
+// ── PROGRESS ───────────────────────────────────────────────────────────────
+setTimeout(()=>{document.getElementById('progFill').style.width='82.5%';},300);
+
+// ── DRAWER ─────────────────────────────────────────────────────────────────
+const drawer=document.getElementById('drawer');
+const overlay=document.getElementById('drawerOverlay');
+function openDrawer(){drawer.classList.add('open');overlay.classList.add('open');}
+function closeDrawer(){drawer.classList.remove('open');overlay.classList.remove('open');}
+document.getElementById('menuBtn').addEventListener('click',openDrawer);
+document.getElementById('drawerClose').addEventListener('click',closeDrawer);
+overlay.addEventListener('click',closeDrawer);
+document.querySelectorAll('.drawer-link').forEach(a=>a.addEventListener('click',closeDrawer));
+
+// ── ACTIVE BOTTOM TAB & DRAWER ON SCROLL ──────────────────────────────────
+const sections=document.querySelectorAll('section[id]');
+const tabbarItems=document.querySelectorAll('.tabbar-item');
+const drawerLinks=document.querySelectorAll('.drawer-link');
+
+const SEC_TO_TAB={
+  altitude:'altitude',trends:'altitude',
+  weekly:'weekly',
+  markers:'status',status:'status',
+  flags:'flags',
+  insights:'recs',recs:'recs'
+};
+
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const id=e.target.id;
+      const tabKey=SEC_TO_TAB[id]||id;
+      tabbarItems.forEach(t=>t.classList.toggle('active',t.dataset.sec===tabKey));
+      drawerLinks.forEach(d=>d.classList.toggle('active',d.dataset.sec===id));
+    }
+  });
+},{rootMargin:'-30% 0px -65% 0px'});
+sections.forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>
